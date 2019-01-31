@@ -45,20 +45,21 @@ export default class Tweet extends Component {
         <p>{tweet.text}</p>  
 
         <span>
-        {this.state.Liked ?  
+        {tweet.likersIds.includes(Meteor.userId()) ?  
         <button onClick={() => this.LikeClicked(tweet)}>Liked </button> 
         :
         <button onClick={() => this.LikeClicked(tweet)}>Like </button>}
-        {tweet.like} 
+        {tweet.likersIds.length} 
         </span>
         
         <span>
-        {this.state.Disliked ?
+        {tweet.dislikersIds.includes(Meteor.userId()) ?
         <button onClick={() =>this.DislikeClicked(tweet)} >Disliked </button>
         :
         <button onClick={() =>this.DislikeClicked(tweet)} >Dislike </button>}
-        {tweet.dislike}
+        {tweet.dislikersIds.length}
         </span>
+        {console.log(tweet.likersIds.includes(Meteor.userId()))}
 
         <span><button onClick={() => Meteor.call('tweets.updateStatus', tweet)}>Status: </button>{tweet.status}</span>
         <span>Chars: {tweet.chars}</span>
@@ -77,11 +78,3 @@ export default class Tweet extends Component {
     }
   }
 }
-
-// export default tweetsContainer = withTracker(() => {
-//   Meteor.subscribe('tweets')
-//   return {
-//     tweets: Tweets.find({}, { sort: { createdAt: -1 }}).fetch(),
-//     currentUser: Meteor.user()
-//   }
-// })(Tweet)

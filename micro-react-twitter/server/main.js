@@ -4,7 +4,7 @@ import React from 'react'
 
 function insertTweet(text, like, dislike, status, chars) {
   // Tweets.insert({ title, url, createdAt: new Date() });
-  Tweets.insert({ text, like, dislike, status, chars, createdAt: new Date() });
+  Tweets.insert({ text, chars, status, createdAt, owner, username, likersIds, dislikersIds  });
 }
 
 Meteor.startup(() => {
@@ -13,9 +13,12 @@ Meteor.startup(() => {
     insertTweet(
       'this is the first tweet - its text',
       '0',
-      '0',
       'Public',
-      '0',
+      new Date(),
+      Meteor.userId(),
+      Meteor.user().username,
+      [],
+      [],
     );
   }
 })

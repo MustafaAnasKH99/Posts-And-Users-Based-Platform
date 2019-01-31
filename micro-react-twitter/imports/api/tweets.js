@@ -10,8 +10,6 @@ Meteor.methods({
         check(text, String);
         Tweets.insert({
         text: text,
-        likes: 0, 
-        dislikes: 0,
         status: 'Public',
         chars: text.length,
         createdAt: new Date(),
@@ -54,13 +52,31 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized')
         }
     },
-    // store the id of the user in the tweet's likersIds Array
+    // push/pull the id of the user in the tweet's likersIds Array
     'tweets.updateLikers'(tweet){
-        Tweets.update(tweet._id, { $push: { likersIds: Meteor.userId() } })
+        if (!this.userId){
+            alert('You need to be logged in!')
+            throw new Meteor.Error('not-authorized')
+        } else {
+        if (tweet.likersIds.includes(Meteor.userId())){
+            Tweets.update(tweet._id, { $pull: { likersIds: Meteor.userId() } })
+        } else {
+            Tweets.update(tweet._id, { $push: { likersIds: Meteor.userId() } })
+        }
+        }
     },
-    // store the id of the user in the tweet's dislikersIds Array
+    // push/pull the id of the user in the tweet's dislikersIds Array
     'tweets.updateDislikers'(tweet){
-        Tweets.update(tweet._id, { $push: { dislikersIds: Meteor.userId() } })
+        if (!this.userId){
+            alert('You need to be logged in!')
+            throw new Meteor.Error('not-authorized')
+        } else {
+            if (tweet.dislikersIds.includes(Meteor.userId())){
+                Tweets.update(tweet._id, { $pull: { dislikersIds: Meteor.userId() } })
+            } else {
+                Tweets.update(tweet._id, { $push: { dislikersIds: Meteor.userId() } })
+            }
+        }
     }
 })
 
